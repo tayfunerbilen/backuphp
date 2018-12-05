@@ -15,9 +15,10 @@ class Backup
      * Backup constructor.
      * @param $config
      */
-    public function __construct($config)
+    public function __construct($config = [])
     {
-        $this->config = $config;
+        if ($config)
+            $this->config = $config;
     }
 
     /**
