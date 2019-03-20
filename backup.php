@@ -19,8 +19,46 @@ class Backup
     {
         if ($config)
             $this->config = $config;
+        else{
+            $this->config=[
+                'db'=>[
+                    'host'=>'localhost',
+                    'user'=>'root',
+                    'pass'=>'',
+                    'file'=>'sqlBackup.sql'
+                ],
+                'folder' => [ 
+                    'dir' => './',
+                    'file' => 'yedek.zip',
+                    'exclude' => [''] 
+                ]
+            ];
+        }
     }
 
+
+    public function allDatabases()
+    {
+        try {
+            $this->db = new PDO('mysql:host=' . $this->config['db']['host'].';charset=utf8',
+            $this->config['db']['user'],
+            $this->config['db']['pass']);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+        $databases=$this->getAll("SHOW DATABASES");
+        
+        foreach($databases as $key => $database){
+            $this->sql='';
+            $databaseName=$database['Database'];
+            $databaseDetail = $this->getFirst('SHOW CREATE DATABASE %s', [$databaseName]);
+            $this->sql .= $databaseDetail['Create Database'] . ';' . str_repeat(PHP_EOL, 3);
+
+            $this->config['db']['dbname']=$databaseName;
+            $this->config['db']['file']=htmlspecialchars($databaseName).'.sql';
+            $this->mysql();   
+        }
+    }
     /**
      * @param array $config
      * @return bool|int
@@ -84,9 +122,7 @@ class Backup
                     $columnsData[] = '(' . implode(',', $row) . ')';
                 }
                 $this->sql .= implode(',' . PHP_EOL, $columnsData) . ';' . str_repeat(PHP_EOL, 5);
-
             }
-
         }
 
         // Triggerlar için metod
@@ -99,7 +135,6 @@ class Backup
         $this->dumpProcedures();
 
         return file_put_contents($this->config['db']['file'], $this->sql);
-
     }
 
     /**
@@ -135,7 +170,6 @@ class Backup
             }
             $this->sql .= 'DELIMITER ;' . str_repeat(PHP_EOL, 5);
         }
-
     }
 
     private function dumpFunctions()
@@ -151,7 +185,6 @@ class Backup
             }
             $this->sql .= 'DELIMITER ;' . str_repeat(PHP_EOL, 5);
         }
-
     }
 
     private function dumpProcedures()
@@ -167,7 +200,6 @@ class Backup
             }
             $this->sql .= 'DELIMITER ;' . str_repeat(PHP_EOL, 5);
         }
-
     }
 
     /**
@@ -230,7 +262,6 @@ class Backup
         }
 
         return $result;
-
     }
 
     /**
@@ -239,8 +270,8 @@ class Backup
      */
     public function full()
     {
-        if ($this->mysql()){
-            if ($this->folder()){
+        if ($this->mysql()) {
+            if ($this->folder()) {
                 return true;
             } else {
                 throw new \Exception('Zipleme işlemi sırasında bir hata oluştu!');
@@ -249,5 +280,5 @@ class Backup
             throw new \Exception('Mysqldump sırasında bir hata oluştu!');
         }
     }
-
 }
+
