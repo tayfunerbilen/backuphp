@@ -2,10 +2,11 @@
 I prepared this class in lecture that I published on my Youtube channel.
 
 If you watching lectures;
-[MySQL Backup Lecture](https://www.youtube.com/watch?v=nEE7c82XEsg)
+
+[MySQL Backup Lecture](https://www.youtube.com/watch?v=nEE7c82XEsg) | 
 [Folder Backup Lecture](https://www.youtube.com/watch?v=5t_-cUDYyB8)
 
-## Usage
+# Usage
 
 First, you need to initialize `Backup` class.
 ```php
