@@ -13,48 +13,60 @@ $backup = new Backup();
 
 For mysql backup;
 ```php
-$mysqlBackup = $backup->mysql([
-    'host' => 'localhost',
-    'user' => '',
-    'pass' => '',
-    'dbname' => '',
-    'file' => __DIR__ . '/backup.sql'
-]);
-if ($mysqlBackup){
-    echo 'success';
-}
-```
-
-For folder backup;
-```php
-$folderBackup = $backup->folder([
-    'dir' => 'cms',
-    'file' => 'backup.zip',
-    'exclude' => ['.idea', 'upload', 'vendor'] // exclude these files while backup
-]);
-if ($folderBackup){
-    echo 'success';
-}
-```
-
-For full backup;
-```php
-$backup = new Backup([
-    'db' => [
+try {
+    $mysqlBackup = $backup->mysql([
         'host' => 'localhost',
         'user' => '',
         'pass' => '',
         'dbname' => '',
         'file' => __DIR__ . '/backup.sql'
-    ],
-    'folder' => [
-        'dir' => 'cms', // directory name
-        'file' => 'full_backup.zip',
+    ]);
+    if ($mysqlBackup){
+        echo 'success';
+    }
+} catch (Exception $e){
+    die($e->getMessage());
+}
+```
+
+For folder backup;
+```php
+try {
+    $folderBackup = $backup->folder([
+        'dir' => 'cms',
+        'file' => 'backup.zip',
         'exclude' => ['.idea', 'upload', 'vendor'] // exclude these files while backup
-    ]
-]);
-$yedekle = $backup->full();
-if ($yedekle){
-    echo 'success';
+    ]);
+    if ($folderBackup){
+        echo 'success';
+    }
+} catch (Exception $e){
+    die($e->getMessage());
+}
+```
+
+For full backup;
+```php
+try {
+    $backup = new Backup([
+        'db' => [
+            'host' => 'localhost',
+            'user' => '',
+            'pass' => '',
+            'dbname' => '',
+            'file' => __DIR__ . '/backup.sql'
+        ],
+        'folder' => [
+            'dir' => 'cms', // directory name
+            'file' => 'full_backup.zip',
+            'exclude' => ['.idea', 'upload', 'vendor'] // exclude these files while backup
+        ]
+    ]);
+    $yedekle = $backup->full();
+    if ($yedekle){
+        echo 'success';
+    }
+} catch (Exception $e){
+    die($e->getMessage());
 }
 ```
