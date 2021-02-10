@@ -6,8 +6,6 @@ If you watching lectures;
 [MySQL Backup Lecture](https://www.youtube.com/watch?v=nEE7c82XEsg) | 
 [Folder Backup Lecture](https://www.youtube.com/watch?v=5t_-cUDYyB8)
 
-# Usage
-
 First, you need to initialize `Backup` class.
 ```php
 $backup = new Backup();
